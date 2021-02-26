@@ -26,10 +26,12 @@ define('MAX_ITEM_DUMP',50);
 
 // Add servers in git ignored servers.php
 // Or use local one
-if (file_exists("servers.php")) {
-	include_once("servers.php");
-} else {
-	$MEMCACHE_SERVERS[] = 'localhost:11211';
+$MEMCACHE_SERVERS = ($MEMCACHE_SERVERS = getenv('MEMCACHE_SERVERS'))
+    ? explode(',', $MEMCACHE_SERVERS)
+    : [];
+
+if (!$MEMCACHE_SERVERS) {
+    die("No servers configured in MEMCACHE_SERVERS envvar.");
 }
 
 ////////// END OF DEFAULT CONFIG AREA /////////////////////////////////////////////////////////////
